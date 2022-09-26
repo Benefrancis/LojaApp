@@ -30,8 +30,6 @@ public class LojaController {
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
 		builder.path(Long.toString(lojaSalva.getId()));
 
-		var response = Response.created(builder.build()).build();
-
-		return response;
+		return Response.created(builder.build()).build();
 	}
 }

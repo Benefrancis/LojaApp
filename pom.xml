@@ -8,13 +8,14 @@
 	<groupId>br.com.fiap.tads.ddd</groupId>
 	<artifactId>loja</artifactId>
 	<version>0.0.1</version>
-	<packaging>war</packaging>
+<!-- 	<packaging>war</packaging> -->
 	<name>loja</name>
 
 	<!-- FIXME change it to the project's website -->
 	<url>https://blog.payara.fish/getting-started-with-jakarta-ee-9-hello-world</url>
 
-	<!-- mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes  -DarchetypeArtifactId=maven-archetype-quickstart -->
+	<!-- mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes 
+		-DarchetypeArtifactId=maven-archetype-quickstart -->
 
 	<properties>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
@@ -66,29 +67,70 @@
 				</configuration>
 			</plugin>
 
+
+			<plugin>
+				<groupId>org.mvnsearch</groupId>
+				<artifactId>toolchains-maven-plugin</artifactId>
+				<version>4.2.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>toolchain</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<toolchains>
+						<jdk>
+							<version>17</version>
+							<vendor>oracle_open_jdk</vendor>
+						</jdk>
+					</toolchains>
+				</configuration>
+			</plugin>
+
+
+
+
+
 			<!-- Execute 'mvn clean package payara-micro:start' to run the application. -->
 			<plugin>
 				<groupId>fish.payara.maven.plugins</groupId>
 				<artifactId>payara-micro-maven-plugin</artifactId>
 				<version>1.4.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution>
-				</executions>
-
 				<configuration>
+					<useUberJar>false</useUberJar>
+					<contextRoot>/</contextRoot>
+					<payaraVersion>1.4.0</payaraVersion>
+					<deployWar>false</deployWar>
 					<artifactItem>
 						<groupId>fish.payara.extras</groupId>
 						<artifactId>payara-micro</artifactId>
-						<version>5.2021.10</version>
+						<version>6.2022.1.Alpha4</version>
 					</artifactItem>
-					<deployWar>true</deployWar>
-					<contextRoot>/</contextRoot>
+					<javaCommandLineOptions>
+						<option>
+							<value>-Xdebug</value>
+						</option>
+					</javaCommandLineOptions>
+					<commandLineOptions>
+						<option>
+							<key>--nocluster</key>
+						</option>
+						<option>
+							<key>--port</key>
+							<value>8095</value>
+						</option>
+						<option>
+							<key>--postbootcommandfile</key>
+							<value>${project.basedir}/src/main/resources/post-boot-commands.txt</value>
+						</option>
+						<option>
+							<key>--deploy</key>
+							<value>${project.build.directory}/${project.build.finalName}</value>
+						</option>
+					</commandLineOptions>
 				</configuration>
-
 			</plugin>
 		</plugins>
 	</build>
